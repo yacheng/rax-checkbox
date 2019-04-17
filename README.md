@@ -43,6 +43,10 @@ class App extends Component {
           containerStyle={{
             marginTop: 10,
           }}
+          checkboxStyle={{
+            width: 5,
+            height: 5,
+          }}
           onChange={(checked) => {
             console.log('checked', checked);
           }} />
