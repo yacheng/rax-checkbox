@@ -31,29 +31,22 @@ import CheckBox from 'rax-checkbox';
 
 ```jsx
 // demo
-import {createElement, Component, render} from 'rax';
-import View from 'rax-view';
-import Button from 'rax-checkbox';
+import { createElement } from 'rax';
+import CheckBox from 'rax-checkbox';
 
-class App extends Component {
-  render() {
-    return (
-      <View style={{ width: 750 }}>
-        <CheckBox 
-          containerStyle={{
-            marginTop: 10,
-          }}
-          checkboxStyle={{
-            width: 5,
-            height: 5,
-          }}
-          onChange={(checked) => {
-            console.log('checked', checked);
-          }} />
-      </View>
-    );
-  }
-}
-
-render(<App />);
+export default (props) => {
+  return (
+    <CheckBox
+      containerStyle={{
+        marginTop: 10,
+      }}
+      checkboxStyle={{
+        width: 5,
+        height: 5,
+      }}
+      onChange={(checked) => {
+        console.log('checked', checked);
+      }} />
+  );
+};
 ```
