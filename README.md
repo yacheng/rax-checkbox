@@ -1,47 +1,52 @@
-## <%= answers.name%>
-<%= answers.description %>
+# CheckBox 选择框
 
-## Install
+CheckBox 是基础的选择框，选择框用图片实现，支持用户使用自己的图片进行替换
 
-```
-$ npm install <%= answers.name%> --save
-```
+![](https://gw.alicdn.com/tfs/TB1r5wbRVXXXXaNXFXXXXXXXXXX-255-77.gif)
 
-## Usage
+## 安装
 
-```
-import MyComponent from '<%= answers.name%>';
+```bash
+$ npm install rax-checkbox --save
 ```
 
-## API
+## 引用
 
-### Props
-
-|name|type|default|describe|
-|:---------------|:--------|:----|:----------|
-|name|String|''|describe|
-
-### Function
-
-|name|param|return|describe|
-|:---------------|:--------|:----|:----------|
-|name|Object|/|describe|
-
-## Example
-
+```jsx
+import CheckBox from "rax-checkbox";
 ```
-import {createElement, Component, render} from 'rax';
+
+## 属性
+
+| 名称           | 类型     | 默认值 | 描述           |
+| :------------- | :------- | :----- | :------------- |
+| checked        | Boolean  |        | 选中状态       |
+| checkedImage   | String   |        | 选中图片       |
+| uncheckedImage | String   |        | 非选中图片     |
+| containerStyle | Object   |        | 选择框容器样式 |
+| checkboxStyle  | Object   |        | 选择框图片样式 |
+| onChange       | Function |        | 选择事件       |
+
+## 基本示例
+
+```jsx
+// demo
+/* eslint-disable import/no-extraneous-dependencies */
+import { createElement, render, useRef, useEffect } from 'rax';
+import DU from 'driver-universal';
 import View from 'rax-view';
+import CheckBox from 'rax-checkbox';
 
-class App extends Component {
-  render() {
-    return (
-      <View>
-      	{ /* your code */ } 
-      </View>
-    );
-  }
-}
+const App = () => {
+  const checkboxRef = useRef(null);
+  useEffect(() => {
+    console.log(checkboxRef);
+  });
+  return <View ><CheckBox ref={checkboxRef} /></View>;
+};
 
-render(<App />);
+render(<App />, document.body, {
+  driver: DU
+});
+
 ```
