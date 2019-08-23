@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "clean": "rm -rf ./lib && rm -rf ./package-lock.json",
+    "clean": "rm -rf ./lib && rm -rf ./package-lock.json && rm -rf ./yarn.lock",
     "build": "npm run clean && rax-scripts build --type 'component'",
     "start": "rax-scripts start --type 'component' -p 8000",
     "miniapp": "rax-scripts start --type 'component-miniapp'",
