@@ -42,6 +42,7 @@
     "eslint-config-rax": "^0.0.0",
     "rax": "^1.0.0",
     "rax-scripts": "^1.2.0",
-    "rax-test-renderer": "^1.0.0"
+    "rax-test-renderer": "^1.0.0",
+    "rax-text": "^1.0.1"
   }
 }
