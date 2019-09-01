@@ -20,6 +20,7 @@ import CheckBox from "rax-checkbox";
 
 | 名称           | 类型     | 默认值 | 描述           |
 | :------------- | :------- | :----- | :------------- |
+| defaultChecked | Boolean  |        | 默认选中状态       |
 | checked        | Boolean  |        | 选中状态       |
 | checkedImage   | String   |        | 选中图片       |
 | uncheckedImage | String   |        | 非选中图片     |
@@ -31,22 +32,55 @@ import CheckBox from "rax-checkbox";
 
 ```jsx
 // demo
-/* eslint-disable import/no-extraneous-dependencies */
-import { createElement, render, useRef, useEffect } from 'rax';
+/** @jsx createElement */
+'use strict';
+import { createElement, render, useState } from 'rax';
 import DU from 'driver-universal';
+import Checkbox from 'rax-checkbox';
 import View from 'rax-view';
-import CheckBox from 'rax-checkbox';
+import Text from 'rax-text';
 
 const App = () => {
-  const checkboxRef = useRef(null);
-  useEffect(() => {
-    console.log(checkboxRef);
-  });
-  return <View ><CheckBox ref={checkboxRef} /></View>;
+  const [checked, setChecked] = useState(false);
+  const [controlledCheckboxMsg, setControlledCheckboxMsg] = useState('');
+  const [unControlledCheckboxMsg, setUncontrolledCheckboxMsg] = useState('');
+  return (
+    <View>
+      <Text>Controlled: {controlledCheckboxMsg}</Text>
+      <Checkbox
+        checked={checked}
+        onChange={hasChecked => {
+          setControlledCheckboxMsg(`onChange => ${hasChecked}`);
+        }}
+      >{(value) => <Text>{value}</Text>}</Checkbox>
+      <View
+        style={{
+          paddingLeft: 15,
+          paddingRight: 15,
+          backgroundColor: '#1890FF',
+          width: 200,
+          borderRadius: 15,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        onClick={() => {
+          setChecked(!checked);
+        }}
+      >
+        <Text style={{ color: '#fff' }}>Click Me!</Text>
+      </View>
+      <Text>Uncontrolled: {unControlledCheckboxMsg}</Text>
+      <Checkbox
+        defaultChecked
+        onChange={(hasChecked) => {
+          setUncontrolledCheckboxMsg(`onChange => ${hasChecked}`);
+        }}
+      >{(value) => (<Text>{value}</Text>)}</Checkbox>
+    </View>
+  );
 };
 
 render(<App />, document.body, {
   driver: DU
 });
-
 ```
