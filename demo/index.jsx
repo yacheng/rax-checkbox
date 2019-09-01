@@ -1,4 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
+/** @jsx createElement */
+'use strict';
 import { createElement, render, useState } from 'rax';
 import DU from 'driver-universal';
 import Checkbox from '../src/index';
@@ -7,15 +9,17 @@ import Text from 'rax-text';
 
 const App = () => {
   const [checked, setChecked] = useState(false);
+  const [controlledCheckboxMsg, setControlledCheckboxMsg] = useState('');
+  const [unControlledCheckboxMsg, setUncontrolledCheckboxMsg] = useState('');
   return (
     <View>
-      <Text>Controlled:</Text>
+      <Text>Controlled: {controlledCheckboxMsg}</Text>
       <Checkbox
         checked={checked}
         onChange={hasChecked => {
-          alert(`Controlled onChange => ${hasChecked}`);
+          setControlledCheckboxMsg(`onChange => ${hasChecked}`);
         }}
-      />
+      >{(value) => <Text>{value}</Text>}</Checkbox>
       <View
         style={{
           paddingLeft: 15,
@@ -32,13 +36,13 @@ const App = () => {
       >
         <Text style={{ color: '#fff' }}>Click Me!</Text>
       </View>
-      <Text>Uncontrolled:</Text>
+      <Text>Uncontrolled: {unControlledCheckboxMsg}</Text>
       <Checkbox
         defaultChecked
-        onChange={hasChecked => {
-          alert(`Uncontrolled onChange => ${hasChecked}`);
+        onChange={(hasChecked) => {
+          setUncontrolledCheckboxMsg(`onChange => ${hasChecked}`);
         }}
-      />
+      >{(value) => (<Text>{value}</Text>)}</Checkbox>
     </View>
   );
 };

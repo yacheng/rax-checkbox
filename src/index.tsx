@@ -1,13 +1,6 @@
-import {
-  createElement,
-  useState,
-  useEffect,
-  CSSProperties,
-  FunctionComponent
-} from 'rax';
+import { createElement, useState, CSSProperties, FunctionComponent, useRef, useEffect } from 'rax';
 import Image from 'rax-image';
 import View from 'rax-view';
-import './index.css';
 
 const CHECKED_ICON =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAMAAACelLz8AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAwUExURUxpcTMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzLRwScAAAAPdFJOUwDvEI8wz69QQL/fIHCAYDHs4yUAAACoSURBVCjPfdIBDoMgDAXQ31JE1K33v60UZSJ2NjEmvvgpUIAD6aMoMMBR3YqMoBpmDDXbV1B5nApKUB3/kU9ZR1QLDcKklACPJmvCpWSSPWLbJK0e1bgNDrW4J/3iLmLbSov7oqNyjtFsM5nQUzyOc61xfKPlOOpsr4QbSb0x6uKuNqTdZovrmm+W8KDTJjhUbeGB5LS8SDcChV4GwB0bqWPzMmz/R3QHJwAPwC8jHWQAAAAASUVORK5CYII=';
@@ -18,73 +11,89 @@ export interface CheckBoxProps {
   /**
    * selected state
    */
-  checked: boolean;
-  checkedImage: string;
-
+  checked?: boolean;
+  /**
+   * default selected state
+   */
+  defaultChecked?: boolean;
+  /**
+   * selected picture
+   */
+  checkedImage?: string;
   /**
    * unselected picture
    */
-  uncheckedImage: string;
+  uncheckedImage?: string;
   /**
    * select box container style
    */
-  containerStyle: CSSProperties;
+  containerStyle?: CSSProperties;
 
   /**
    * select box picture style
    */
-  checkboxStyle: CSSProperties;
+  checkboxStyle?: CSSProperties;
 
   /**
    * change event
    * @param checked checked
    */
-  onChange: (checked?: boolean) => void;
+  onChange?: (checked?: boolean) => void;
 }
 
 const CheckBox: FunctionComponent<CheckBoxProps> = ({
-  checked = false,
+  checked,
+  defaultChecked = false,
   checkedImage = CHECKED_ICON,
   uncheckedImage = UNCHECKED_ICON,
   containerStyle = {},
   checkboxStyle = {},
-  onChange
+  onChange,
+  children
 }) => {
-  const [isChecked, setIsChecked] = useState(checked);
-
-  const handleChange = () => {
-    const _checked = !isChecked;
-    setIsChecked(_checked);
-    if (onChange) {
-      onChange(_checked);
-    }
-  };
-
+  const [isChecked, setIsChecked] = useState(defaultChecked);
+  const isInitialMount = useRef(false);
+  const _checked = checked !== undefined ? checked : isChecked;
   useEffect(() => {
-    setIsChecked(Boolean(checked));
-  }, [checked]);
-
+    if (!isInitialMount.current) {
+      isInitialMount.current = true;
+    } else {
+      if (onChange) {
+        onChange(_checked);
+      }
+    }
+  }, [_checked]);
   return (
     <View
+      className="container"
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        ...children ? {} : { width: 40, height: 40 },
+        ...containerStyle
+      }}
       role="checkbox"
-      aria-checked={isChecked}
-      onClick={handleChange}
-      className="flexContainer"
+      aria-checked={_checked}
+      onClick={() => {
+        if (typeof checked !== 'undefined') {
+          return;
+        }
+        if (onChange) {
+          onChange(!isChecked);
+        }
+        setIsChecked(!isChecked);
+      }}
     >
-      <View
-        className="container"
+      <Image
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: 10,
-          ...containerStyle
+          marginRight: children ? 8 : 0,
+          width: 40,
+          height: 40,
+          ...checkboxStyle
         }}
-      >
-        <Image
-          style={{ width: 40, height: 40, ...checkboxStyle }}
-          source={{ uri: isChecked ? checkedImage : uncheckedImage }}
-        />
-      </View>
+        source={{ uri: _checked ? checkedImage : uncheckedImage }}
+      />
+      {typeof children === 'function' ? children(_checked) : children}
     </View>
   );
 };
